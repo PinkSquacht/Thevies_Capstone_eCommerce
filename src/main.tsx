@@ -9,9 +9,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <>
       <App />
       <SignUp />
-      <>
-            <SignUp />
-      </>
+    
       <>
             <ShoppingAPi />
 
