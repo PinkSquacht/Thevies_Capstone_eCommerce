@@ -57,6 +57,7 @@ export default function SignUp() {
         const errorMessage = error.message;
         console.log(errorCode);
         console.log(errorMessage);
+        // ..
       });
   };
 

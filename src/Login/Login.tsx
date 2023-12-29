@@ -12,8 +12,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
+
 
 function Copyright(props: any) {
   return (
@@ -43,16 +44,19 @@ export default function SignIn() {
   });
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
+    signInWithEmailAndPassword(auth, user.email, user.password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
+        console.log(user);
         // ...
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        alert(errorMessage + " " + errorCode);
       });
+
   };
 
   return (
@@ -80,6 +84,7 @@ export default function SignIn() {
             sx={{ mt: 1 }}
           >
             <TextField
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
               margin="normal"
               required
               fullWidth
@@ -90,6 +95,7 @@ export default function SignIn() {
               autoFocus
             />
             <TextField
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
               margin="normal"
               required
               fullWidth

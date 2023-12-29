@@ -2,18 +2,18 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import ShoppingAPi from "./ShoppingAPi/ShoppingAPi.tsx";
 import SignUp from "./Signup/Signup.tsx";
+import { BrowserRouter } from "react-router-dom";
 import Navbar from "./Navbar/Navbar.tsx";
-import Login from "./Login/Login.tsx";
-// import SignUp from './Signup/Signup.tsx'
+import ProductProvider from "./Product/ProductContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <>
-    <App />
-    <Navbar />
-    <SignUp />
-    <Login />
-    <ShoppingAPi />
-  </>
+  <ProductProvider>
+    <React.StrictMode>
+      <BrowserRouter>
+        <Navbar />
+        <App />
+      </BrowserRouter>
+    </React.StrictMode>
+  </ProductProvider>
 );
