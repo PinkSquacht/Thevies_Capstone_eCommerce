@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { ProductContext } from "../Product/ProductContext";
-import Product from "../Product/Product";
-import { Grid, Box } from '@mui/material';
+import { ProductContext } from "../contexts/ProductContext";
+import Product from "../components/Product";
+import { Container, Row } from 'react-bootstrap';
 
 const Home = () => {
   // get products from context
@@ -11,17 +11,15 @@ const Home = () => {
     return item.category === "men's clothing" || item.category === "women's clothing";
   });
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={0}>
+    <Container>
+      <Row>
         {filteredProducts.map((product) => {
           return (
-            <Grid item xs={6} key={product.id}>
-              <Product product={product} />
-            </Grid>
+            <Product key={product.id} product={product} />
           );
         })}
-      </Grid>
-    </Box>
+      </Row>
+    </Container>
   );
 }
 

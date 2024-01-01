@@ -3,36 +3,16 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
-
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
+import { useNavigate } from "react-router-dom";
+import StoreRoundedIcon from "@mui/icons-material/StoreRounded";
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
@@ -43,13 +23,14 @@ export default function SignUp() {
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     createUserWithEmailAndPassword(auth, user.email, user.password)
       .then((userCredential) => {
         // Signed up
         const user = userCredential.user;
-        console.log(user);
+        navigate("/");
         // ...
       })
       .catch((error) => {
@@ -73,8 +54,9 @@ export default function SignUp() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
+          <Avatar sx={{ m: 1, bgcolor: "tan" }}>
+          <StoreRoundedIcon sx={{ color: "black" }} />
+
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up
@@ -146,20 +128,20 @@ export default function SignUp() {
               type="submit"
               fullWidth
               variant="contained"
+              color="success"
               sx={{ mt: 3, mb: 2 }}
             >
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/login" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>
   );
