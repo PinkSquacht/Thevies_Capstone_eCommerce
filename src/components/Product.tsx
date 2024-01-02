@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import { BsPlus } from "react-icons/bs";
 import { Card, Button, Col, Row } from "react-bootstrap";
-import { CartContext } from "../contexts/CartContext";
+import { useCart } from "../contexts/CartContext"; // import useCart
 
 const Product = ({ product }: { product: any }) => {
-  const { addToCart } = useContext(CartContext);
+  const { addToCart } = useCart(); // use useCart instead of useContext
   const { id, title, price, image, description } = product;
 
   return (
@@ -24,7 +24,7 @@ const Product = ({ product }: { product: any }) => {
             </Card.Body>
             <Card.Footer className="d-flex justify-content-center">
               <Button
-                onClick={() => addToCart ? addToCart(product, id) : null}
+                onClick={() => addToCart ? addToCart(product) : null}
                 variant="success"
               >
                 <BsPlus /> Add to Cart

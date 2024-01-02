@@ -49,7 +49,6 @@ export function CartProvider({ children }: CartProviderProps) {
 
     const openCart = useCallback(() => setCartOpen(true), []);
     const closeCart = useCallback(() => setCartOpen(false), []);
-
     const getItemCount = useCallback((id: number) => cart.find((item) => item.id === id)?.count || 0, [cart]);
 
     const increaseCount = useCallback((id: number) => {
@@ -64,6 +63,7 @@ export function CartProvider({ children }: CartProviderProps) {
         setCart((cart) => cart.filter((item) => item.id !== id));
     }, []);
 
+    
     return (
         <CartContext.Provider
             value={{

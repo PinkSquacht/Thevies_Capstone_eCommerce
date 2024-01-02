@@ -1,5 +1,7 @@
 import React from 'react';
 import { useCart } from '../contexts/CartContext';
+import { Link } from 'react-router-dom';
+
 
 function Cart() {
   const { cartItems, removeFromCart } = useCart();
@@ -7,7 +9,7 @@ function Cart() {
   return (
     <div>
       <h1>Your Cart</h1>
-      {cartItems && removeFromCart ? cartItems.map((item) => (
+      {cartItems.length > 0 ? cartItems.map((item) => (
         <div key={item.id}>
           <h2>{item.title}</h2>
           <p>Price: {item.price}</p>
@@ -21,3 +23,4 @@ function Cart() {
 }
 
 export default Cart;
+// 

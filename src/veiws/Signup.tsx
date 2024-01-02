@@ -13,6 +13,8 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import StoreRoundedIcon from "@mui/icons-material/StoreRounded";
+import { doc, setDoc} from "firebase/firestore";
+import { db } from "../firebase";
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
@@ -24,24 +26,35 @@ export default function SignUp() {
     password: "",
   });
   const navigate = useNavigate();
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    createUserWithEmailAndPassword(auth, user.email, user.password)
-      .then((userCredential) => {
-        // Signed up
-        const user = userCredential.user;
-        navigate("/");
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode);
-        console.log(errorMessage);
-        // ..
-      });
-  };
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        user.email,
+        user.password
+      );
 
+      // Create a user document in Firestore
+      const userId = userCredential.user.uid;
+      const userDocRef = doc(db, "users", userId);
+      await setDoc(userDocRef, {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        address: "", // Add any other default fields if needed
+        state: "",
+        country: "",
+        zip: "",
+      });
+
+      navigate("/");
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.error(errorCode, errorMessage);
+    }
+  };
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">

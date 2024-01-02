@@ -8,11 +8,11 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"; // Import the missing ShoppingCartIcon
 import { Link } from "react-router-dom";
-import { CartContext } from "../contexts/CartContext";
 import StoreRoundedIcon from "@mui/icons-material/StoreRounded";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { Box, Container } from "@mui/material";
+import { CartContext } from "../contexts/CartContext";
 
 const pages = [
   { name: "Home", path: "/" },
