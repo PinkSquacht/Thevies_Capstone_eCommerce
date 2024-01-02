@@ -7,13 +7,14 @@ import Product from "./components/Product";
 import { Routes, Route } from "react-router-dom";
 import "@fontsource/roboto/400.css";
 import { CartProvider } from "./contexts/CartContext";
+import Cart from "./components/Cart";
 
 function App() {
   return (
     <CartProvider>    
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/cart" element={<Home />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="/user" element={<UserAcct />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />

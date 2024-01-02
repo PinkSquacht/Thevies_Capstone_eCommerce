@@ -7,6 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import Navbar from "./components/Navbar.tsx";
 import ProductProvider from "./contexts/ProductContext.tsx";
 import { CartProvider } from "./contexts/CartContext.tsx";
+import Cart from "./components/Cart.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <CartProvider>

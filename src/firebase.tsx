@@ -13,7 +13,7 @@ const firebaseConfig = {
   projectId: "e-commerce-e7c4f",
   storageBucket: "e-commerce-e7c4f.appspot.com",
   messagingSenderId: "346980550637",
-  appId: import.meta.env.VITE_APP_ID
+  appId: "1:346980550637:web:aaebd2963edf51b618c9e4"
 };
 
 // Initialize Firebase
