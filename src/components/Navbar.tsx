@@ -1,45 +1,40 @@
-import * as React from "react";
-import { useEffect, useState } from "react"; // Import the missing useEffect and useState
+import React, { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"; // Import the missing ShoppingCartIcon
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Link } from "react-router-dom";
 import StoreRoundedIcon from "@mui/icons-material/StoreRounded";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../firebase";
-import { Box, Container } from "@mui/material";
-import { CartContext } from "../contexts/CartContext";
+import { Box, Container, Badge } from "@mui/material";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
 
 const pages = [
   { name: "Home", path: "/" },
   { name: "Account", path: "/user" },
   { name: "Signup", path: "/signup" },
 ];
+
 interface IUser {
   uid: string;
   email: string;
 }
 
 function ResponsiveAppBar() {
-  console.log(React.useContext(CartContext));
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-
-  
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
   const [user, setUser] = useState<IUser>({ uid: "", email: "" });
+  const [cartItemCount, setCartItemCount] = useState(0);
+
+  const fetchCartItemCount = async (userId: string) => {
+    const db = getFirestore();
+    const cartItemsCollection = collection(db, 'users', userId, 'cartItems');
+    const cartItemsSnapshot = await getDocs(cartItemsCollection);
+    const itemCount = cartItemsSnapshot.docs.reduce((count, doc) => count + (doc.data().quantity || 0), 0);
+    setCartItemCount(itemCount);
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -49,6 +44,9 @@ function ResponsiveAppBar() {
             uid: user.uid,
             email: user.email,
           });
+
+          // Fetch cart item count from Firestore
+          fetchCartItemCount(user.uid);
         }
       }
     });
@@ -56,6 +54,15 @@ function ResponsiveAppBar() {
     // Clean up function
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    const userId = user.uid;
+
+    if (userId) {
+      // Update the cart item count whenever there's a change in cart items
+      fetchCartItemCount(userId);
+    }
+  }, [user]);
 
   const handleSignout = () => {
     signOut(auth)
@@ -65,6 +72,13 @@ function ResponsiveAppBar() {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const handleRemoveItem = async (itemId: string) => {
+    // Your logic to remove the item, update Firestore, etc.
+
+    // After removing, update the cart item count
+    fetchCartItemCount(user.uid);
   };
 
   return (
@@ -96,7 +110,6 @@ function ResponsiveAppBar() {
           {pages.map((page) => (
             <Button
               key={page.name}
-              onClick={handleCloseNavMenu}
               sx={{ mr: 2, color: "black" }}
               component={Link}
               to={page.path}
@@ -123,7 +136,6 @@ function ResponsiveAppBar() {
               <Button
                 variant="outlined"
                 color="success"
-                onClick={handleCloseNavMenu}
                 sx={{ mr: 2, color: "light-blue" }}
                 component={Link}
                 to="/login"
@@ -132,10 +144,12 @@ function ResponsiveAppBar() {
               </Button>
             )}
 
-            <Tooltip title="Open Cart">
+            <Tooltip title={`Open Cart (${cartItemCount} items)`}>
               <Link to="/cart">
                 <IconButton sx={{ p: 0, color: "black" }}>
-                  <ShoppingCartIcon />
+                  <Badge badgeContent={cartItemCount} color="secondary">
+                    <ShoppingCartIcon />
+                  </Badge>
                 </IconButton>
               </Link>
             </Tooltip>
