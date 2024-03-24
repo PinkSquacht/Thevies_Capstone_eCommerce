@@ -17,28 +17,32 @@ const Product = ({ product }: { product: any }) => {
 
     const cartItemRef = doc(db, "users", userId, "cartItems", id.toString());
 
-    const cartItemDoc = await getDoc(cartItemRef);
+    try {
+      const cartItemDoc = await getDoc(cartItemRef);
 
-    if (cartItemDoc.exists()) {
-      const currentQuantity = cartItemDoc.data().quantity || 0;
-      const newQuantity = currentQuantity + 1;
+      if (cartItemDoc.exists()) {
+        const currentQuantity = cartItemDoc.data()?.quantity || 0;
+        const newQuantity = currentQuantity + 1;
 
-      await updateDoc(cartItemRef, {
-        quantity: newQuantity,
-      });
+        await updateDoc(cartItemRef, {
+          quantity: newQuantity,
+        });
 
-      console.log("Item quantity updated in Firestore!");
-    } else {
-      await setDoc(cartItemRef, {
-        id,
-        title,
-        price,
-        image,
-        description,
-        quantity: 1,
-      });
+        console.log("Item quantity updated in Firestore!");
+      } else {
+        await setDoc(cartItemRef, {
+          id,
+          title,
+          price,
+          image,
+          description,
+          quantity: 1,
+        });
 
-      console.log("Item added to Firestore!");
+        console.log("Item added to Firestore!");
+      }
+    } catch (error) {
+      console.error("Error adding item to cart:", error);
     }
   };
 
