@@ -7,7 +7,7 @@ import { auth } from "../firebase";
 
 const Product = ({ product }: { product: any }) => {
   const { id, title, price, image, description } = product;
-  const userId = auth.currentUser?.uid;
+  const userId = auth.currentUser ? auth.currentUser.uid : null;
 
   const handleAddToCart = async () => {
     if (!userId) {
